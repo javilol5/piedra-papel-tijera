@@ -8,9 +8,3 @@ __pycache__
 
 # Pytest
 .pytest_cache
-
-# Personal notes
-doc/
-
-# Coverage
-.coverage

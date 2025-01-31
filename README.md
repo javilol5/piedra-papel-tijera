@@ -1,55 +1,119 @@
-Práctica curso Programación para IA
-===================================
+Práctica Axentes Intelixentes
+=============================
 
-Extender el código disponible en `05_RPS_More_AI.py` con la funcionalidad necesaria para
-implementar la variante lagarto - Spock del juego piedra, papel o tijeras.
+   * [O problema](#o-problema)
+   * [Contorno de tarefas](#tcontorno-de-tarefas)
+   * [Estrutura do axente](#estrutura-do-axente)
+   * [Implementación](#implementación)
+   * [Extensión](#extensión)
+   * [Entrega](#entrega)
+   * [Bibliografía](#bibliografía)
 
-[Práctica curso Programacion para IA](#práctica-curso-programacion-para-ia)
-  - [Solución](#solución)
-  - [Refactorizaciones](#refactorizaciones)
-  - [Testing](#testing)
+Proponse programar un axente intelixente solución ao entorno de tarefas do xogo pedra, papel, tesoiras, seguindo as directrices de modelado propostas no capítulo 2 _Intelligent Agents_ do libro _IA: A modern approach, Russell & Norvig_.
 
+Para iso é necesario:
 
-## Solución
-
-Solución propuesta en [`RPS_spock_lizard.py`](.src/../src/RPS_spock_lizard.py)
-
-## Refactorizaciones
-
-Es necesario refactorizar la función `assess_game()` para conseguir una solución abierta a la extensión y cerrada a la modificación, o principio Open/Closed (OCP) de SOLID.
-
-La inclusión de nuevas categorías en el juego original produce una extensión de la estructura `if-elif-else` que deriva en código cableado, o cierto [input kludge antipattern](https://sourcemaking.com/antipatterns/input-kludge).
-
-Podría haber optado por eliminar la cláusula `if-elif-else` implementando polimorfismo de clase, pero he optado por expresar en el diccionario `Victories` -que ya estaba implementado en el código inicial- las reglas de la lógica del juego de manera declarativa, para mejorar la legibilidad del código. 
-
-No es una solución 100% OCP puesto que si las categorías del juego aumentan no sería viable extender el diccionario, pero confiemos en que la serie _Big Bang Theory_ no goce de una secuela y aumenten el juego con nuevas acciones ;) 
-
-Para ello, he extendido el comportamiento del tipo enumerado `GameAction` simulando la diferencia de conjuntos en la función `minus(excluded_actions)`. Podría haber usado el tipo `set` de Python pero rompia la interfaz `list` necesaria en la función `get_random_computer_action()`. 
-
-He refactorizado la función `get_random_computer_action()` para reutilizarla en `get_winner_action(game_action)`.
-
-Finalmente, he encapsulado la lógica el juego en la clase `Game`. He decidido no usar una clase con métodos estáticos para poder generar distintas instancias del juego. 
+1. Especificar as características do contorno de tarefas.
+2. Identificar o tipo de axente para determinar a estrutura do axente.
+3. Implementar en Python os compoñentes da estrutura do axente para construir a función axente ou función mapa.
 
 
-## Testing
+## O problema
 
-En todo proceso de refactorización de código es necesario incluir un conunto de casos test en aquellos comportamientos más susceptibles de presentar defectos.
+Estudia a [solución básica](./doc/codigo_RPS_explicado.md) ao xogo pedra, papel, tesoiras (desde agora RPS, siglas en inglés correspondentes a _Rock, Paper, Scissors_).
 
-Aunque no he practicado TDD estricta (que es como suelo codificar), he incluído casos test para eliminar defectos del código cuando he estimado que la lógica estaba completada.
+Intenta comprender os constructos Python que se empregan.
 
-Es necesario contar con `pytest` instalado en el entorno virtual.
+## Contorno de tarefas
 
-Para seleccionar sólo los casos test de la lógica extendida: 
+Especifica as características do contorno de tarefas do RPS e xustifica a túa resposta, segundo o epígrafe _"2.3.2 Properties of task environments"_ do capítulo 2 _Intelligent Agents_ do libro _IA: A modern approach, Russell & Norvig_.
 
-```bash
-$ pytest -v -m lizard
-$ pytest -v -m spock
-```
+Resume as características do contorno nunha táboa co formato:
 
-## AIML
+Contorno de tarefas | Observable| Axentes | Determinista | Episódico | Estático | Discreto | Coñecido
+:---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+ RPS | - | - | - | - | - |  - |  - |
 
-He simplicado la salida por consola de la app al mensaje:
+No libro atoparás unha táboa semellante:
 
-`"%s wins %s. You lost!" %(computer_action.name, user_action.name)`
+![Exemplos contornas de tarefas](./doc/exemplos_contornas.png)Exemplos contornas de tarefas.
 
-Es posible implementar las salidas de la aplicación de una manera más explícita usando un fichero `.aiml` y accediendo a los elementos XML con el módulo `xml.etree.ElementTree`. Implementaré esta extensióm a lo largo de esta semana.
+## Estrutura do axente
+
+O noso propósito é deseñar o **programa axente** que implementa a **función axente** ou a **función que mapea** as percepcións a accións. 
+
+A partires do modelo xeral de axente intelixente da figura:
+
+![Modelo xeral axente intelixente](./doc/modelo_AI.png)
+
+**debuxa un modelo adecuado** ao contorno de tarefas e a un dos catro **tipos de programas axente**:
+
+- Axentes reactivos simples
+- Axentes reactivos baseados en modelos.
+- Axentes baseados en obxectivos.
+- Axentes baseados en utilidade.
+
+Cada clase de axente combina compoñentes particulares dun modo particular para xerar as accións. 
+
+## Implementación - Simulando IA
+
+Implementa en Python os compoñentes da estrutura do axente para construir a función axente ou función mapa.
+
+Lee o código contigo en [src](./src/) e os [comentarios ao código](./doc/codigo_RPS_explicado.md).
+
+Modifica a función `get_computer_action()` coa estratexia que consideres máis proveitosa para maximizar o **rendemento** do axente. Recorda que a medida do rendemento vese afectada por diversas consideracións.
+
+Engade os compoñentes software que precises para implementar os compoñentes do tipo de programa axente que deseñaches no epígrafe anterior que, de xeito xeral, se incluen na figura seguinte:
+
+![Table Driven Agent Program](./doc/table_driven_agent_program.png)
+
+Consegue que o código satisfaga os principios **SOLID**, en particular, **SRP** e **OCP** para extender a súa lóxica a diferentes versións do xogo.
+
+## Extensión
+
+Unha vez programado o axente para a versión clásica do RPS, extende o súa lóxica para xogar á versión  [pedra, papel, tesoiras, lagarto, Spock](http://www.samkass.com/theories/RPSSL.html)
+
+## Entrega
+
+Nun proxecto no teu github /gitlab co teu código e a documentación, esta última recollida no `README` do proxecto e escrita en formato Markdown.
+
+## Bibliografía
+
+Lutz, Mark. _Learning Python_. Sebastopol, Ca, O’reilly, 2018.
+
+Martin, Robert C. _Clean Code a Handbook of Agile Software Craftmanship_. Upper Saddle River [Etc.] Prentice Hall, 2010.
+
+Martin, Robert C. _Clean Architecture: A Craftsman’s Guide to Software Structure and Design_. Prentice Hall, 2018.
+
+S. McConnel. _Code Complete: A Practical Handbook of Software Construction_, 2dn Edition. Microsoft Press, 2004.
+
+Russell, Peter. _ARTIFICIAL INTELLIGENCE : A Modern Approach_, Global Edition. S.L., Pearson Education Limited, 2021.
+
+
+## Estructura do proxecto / rubrica
+
+A documentación presentada no `README.md` debe **seguir esta orde e título de epígrafes:**
+
+1.**Especificación do contorna de tarefas**
+
+Especifica todas as características da contorna de tarefas do RPS, justificando cada unha con precisión segundo a sección _"2.3.2 Properties of task environments"_ do libro _"IA: A Modern Approach"_ de Russell & Norvig.
+
+2.**Identificación do tipo de axente e estrutura**
+
+Selecciona un tipo de axente adecuado para o RPS e debuxa un modelo preciso da estrutura do axente, incluíndo os compoñentes específicos do tipo elixido, baseándoche nos conceptos do capítulo 2 _"Intelligent Agents"_.
+
+É moi importante que ademáis da figura escribas un texto enumerando e xustificando a presenza dous comppñentes recollidos na figura anterior. Sen explicacións a figura non se avalía.
+
+3.**Implementación en Python**
+
+Implementa en Python todos os compoñentes da estrutura do axente de forma correcta e eficiente, creando unha función axente que xoga ao RPS seguindo a lóxica do tipo de axente seleccionado. O código cumpre cos principios SOLID, especialmente SRP e OCP, permitindo estender a lóxica a outras versións do xogo. **A estratexia implementada en `get_computer_action()` é creativa e busca maximizar o rendemento do axente**.
+
+O teu código pode e debe ser modular seguindo o principio SRP, pero **a execución da lóxica ten que invocarse dende a función `get_computer_action()`.
+
+A rúbrica da implementación Python [na segunda folla "RPS" deste libro de cálculo.](https://docs.google.com/spreadsheets/d/1r93uZnPmioY0U1D7EDtV1uveKYIOlenkz8uuqks4KXM/) Loguéate antes na túa conta de gmail con acceso ao noso Drive.
+
+4.**Extensión ao RPS + Lizzard Spock**
+
+- Estende a lóxica do axente para xogar á versión "pedra, papel, tesoiras, lagarto, Spock" correctamente, mantendo a calidade do código e a coherencia co tipo de axente seleccionado. 
+
+- A documentación no README do proxecto en GitHub/GitLab deber estar completa seguindo a orde especificada nesta rúbrica, explicando o problema, a contorna de tarefas, a estrutura do axente, a implementación e a extensión, cun formato Markdown axeitado.

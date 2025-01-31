@@ -38,7 +38,6 @@ def assess_game(user_action, computer_action):
             print("Scissors cuts paper. You won!")
 
 
-
 def main():
     game_actions = [ROCK, PAPER, SCISSORS]
 
@@ -53,6 +52,7 @@ def main():
             assess_game(user_action, computer_action)
         except IncorrectOptionException:
             print("\nYou can only picked rock, paper or scissors!")
+
 
 
 if __name__ == "__main__":

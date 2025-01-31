@@ -7,37 +7,52 @@ class GameAction(IntEnum):
     Rock = 0
     Paper = 1
     Scissors = 2
+    Lagarto = 3
+    Spock = 4
+
+
+class GameResult(IntEnum):
+    Victory = 0
+    Defeat = 1
+    Tie = 2
+
 
 Victories = {
-    GameAction.Rock: GameAction.Paper,
-    GameAction.Paper: GameAction.Scissors,
-    GameAction.Scissors: GameAction.Rock
+    GameAction.Paper: GameAction.Rock,
+    GameAction.Paper: GameAction.Spock,
+    GameAction.Scissors: GameAction.Paper, 
+    GameAction.Scissors: GameAction.Lagarto,
+    GameAction.Rock: GameAction.Scissors,
+    GameAction.Rock: GameAction.Lagarto,
+    GameAction.Lagarto: GameAction.Spock,
+    GameAction.Lagarto: GameAction.Paper,
+    GameAction.Spock: GameAction.Scissors,
+    GameAction.Spock: GameAction.Rock
 }
 
+
+
 def assess_game(user_action, computer_action):
-    if user_action == computer_action:
-        print(f"User and computer picked {user_action.name}. Draw game!")
 
-    # You picked Rock
-    elif user_action == GameAction.Rock:
-        if computer_action == GameAction.Scissors:
-            print("Rock smashes scissors. You won!")
-        else:
-            print("Paper covers rock. You lost!")
+    game_result = None
 
-    # You picked Paper
-    elif user_action == GameAction.Paper:
-        if computer_action == GameAction.Rock:
-            print("Paper covers rock. You won!")
-        else:
-            print("Scissors cuts paper. You lost!")
 
-    # You picked Scissors
-    elif user_action == GameAction.Scissors:
-        if computer_action == GameAction.Rock:
-            print("Rock smashes scissors. You lost!")
-        else:
-            print("Scissors cuts paper. You won!")
+    print(f"Tú elegiste: {user_action}")
+    print(f"La máquina eligió: {computer_action}")
+
+    if user_action not in GameAction:
+        print(f"Elección no válida. Por favor, elige entre {', '.join(GameAction)}.")
+    elif user_action == computer_action:
+        print("¡Es un empate!")
+        game_result = GameResult.Tie
+    elif Victories[user_action] == computer_action:
+        print("¡Ganaste!")
+        game_result = GameResult.Victory
+    else:
+        print("Perdiste, mejor suerte la próxima vez.")
+        game_result = GameResult.Defeat
+
+    return game_result
 
 
 def get_computer_action():

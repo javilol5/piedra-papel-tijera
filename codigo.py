@@ -1,13 +1,26 @@
 import random
 
-opciones = ['piedra', 'papel', 'tijera', 'lagarto', 'spock']
+opciones = ['piedra', 'papel', 'tijera']
+#opciones = ['piedra', 'papel', 'tijera', 'lagarto', 'spock']
+
+
 reglas = {
-    'piedra': ['tijera', 'lagarto'],
-    'papel': ['piedra', 'spock'],
-    'tijera': ['papel', 'lagarto'],
-    'lagarto': ['spock', 'papel'],
-    'spock': ['tijera', 'piedra']
+    'piedra': ['tijera'],
+    'papel': ['piedra'],
+    'tijera': ['papel'],
     }
+
+
+
+
+
+#reglas = {
+#    'piedra': ['tijera', 'lagarto'],
+#    'papel': ['piedra', 'spock'],
+#    'tijera': ['papel', 'lagarto'],
+#    'lagarto': ['spock', 'papel'],
+#    'spock': ['tijera', 'piedra']
+#    }
 
 persona = input(f"Elige entre {', '.join(opciones)}: ").lower()
 
